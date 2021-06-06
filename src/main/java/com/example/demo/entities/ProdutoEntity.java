@@ -10,6 +10,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table
 public class ProdutoEntity {
@@ -30,10 +32,14 @@ public class ProdutoEntity {
 	
 	private String imagem;
 	
+	private Integer codigoCategoria;
+	
+//	@GeneratedValue(strategy=GenerationType.TABLE)
+	@JsonBackReference
 	@ManyToOne
 	private CategoriaEntity categoria;
 
-
+	
 
 	public Integer getId() {
 		return id;
@@ -91,13 +97,23 @@ public class ProdutoEntity {
 		this.imagem = imagem;
 	}
 
-	public CategoriaEntity getCategoriaId() {
+	public CategoriaEntity getCategoria() {
 		return categoria;
 	}
 
-	public void setCategoriaId(CategoriaEntity categoriaId) {
-		this.categoria = categoriaId;
+	public void setCategoria(CategoriaEntity categoria) {
+		this.categoria = categoria;
 	}
+
+	public Integer getCodigoCategoria() {
+		return codigoCategoria;
+	}
+
+	public void setCodigoCategoria(Integer codigoCategoria) {
+		this.codigoCategoria = codigoCategoria;
+	}
+
+
 	
 	
 }
