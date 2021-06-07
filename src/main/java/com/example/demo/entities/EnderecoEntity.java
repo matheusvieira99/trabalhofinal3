@@ -24,7 +24,7 @@ public class EnderecoEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
-	private Integer cep;
+	private String cep;
 	
 	private String rua;
 	
@@ -32,7 +32,7 @@ public class EnderecoEntity {
 	
 	private String cidade;
 	
-	private Integer numero;
+	private String numero;
 	
 	private String complemento;
 	
@@ -56,11 +56,11 @@ public class EnderecoEntity {
 		this.id = id;
 	}
 
-	public Integer getCep() {
+	public String getCep() {
 		return cep;
 	}
 
-	public void setCep(Integer cep) {
+	public void setCep(String cep) {
 		this.cep = cep;
 	}
 
@@ -88,11 +88,11 @@ public class EnderecoEntity {
 		this.cidade = cidade;
 	}
 
-	public Integer getNumero() {
+	public String getNumero() {
 		return numero;
 	}
 
-	public void setNumero(Integer numero) {
+	public void setNumero(String numero) {
 		this.numero = numero;
 	}
 

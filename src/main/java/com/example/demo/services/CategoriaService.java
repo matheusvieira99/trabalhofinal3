@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.entities.CategoriaEntity;
+import com.example.demo.exceptions.IdNotFoundException;
 import com.example.demo.repositories.CategoriaRepository;
 
 @Service
@@ -19,17 +20,21 @@ public class CategoriaService {
 		return repo.findAll();
 	}
 	
-	public CategoriaEntity create(CategoriaEntity catObj) {
+	public CategoriaEntity create(CategoriaEntity catObj) throws IdNotFoundException  {
 	
 		return repo.save(catObj);
 	}
 
-	public Optional<CategoriaEntity> buscarId(Integer id) {
+	public Optional<CategoriaEntity> buscarId(Integer id) throws IdNotFoundException {
 	Optional<CategoriaEntity> catReturn = repo.findById(id);
+		if(catReturn.isEmpty()) {
+			throw new IdNotFoundException ("Id não encontrado!");
+		}
+	
 		return catReturn;
 	}
 
-	public CategoriaEntity update(Integer id, CategoriaEntity catEnt) {
+	public CategoriaEntity update(Integer id, CategoriaEntity catEnt) throws IdNotFoundException  {
 		CategoriaEntity  catNew = catEnt;
 		
 		CategoriaEntity cat = repo.getById(id);
@@ -45,7 +50,7 @@ public class CategoriaService {
 		return repo.save(cat);
 	}
 
-	public void delete(Integer id) {
+	public void delete(Integer id) throws IdNotFoundException  {
 		repo.deleteById(id);
 	}
 	

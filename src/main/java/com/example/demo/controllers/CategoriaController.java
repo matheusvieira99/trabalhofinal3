@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.entities.CategoriaEntity;
+import com.example.demo.exceptions.IdNotFoundException;
 import com.example.demo.services.CategoriaService;
 
 @RestController
@@ -32,7 +33,7 @@ public class CategoriaController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<CategoriaEntity> create (@RequestBody CategoriaEntity catObj){
+	public ResponseEntity<CategoriaEntity> create (@RequestBody CategoriaEntity catObj) throws IdNotFoundException{
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("Method: ", "Create");
 		CategoriaEntity body = service.create(catObj);
@@ -42,19 +43,19 @@ public class CategoriaController {
 	//return new ResponseEntity<TodoEntity>(body, headers, HttpStatus.OK);
 	
 	@GetMapping("/{id}")
-	public Optional<CategoriaEntity> getById(@PathVariable Integer id){
+	public Optional<CategoriaEntity> getById(@PathVariable Integer id) throws IdNotFoundException{
 	 
 	
 	return	service.buscarId(id);
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<CategoriaEntity> update(@PathVariable Integer id, @RequestBody CategoriaEntity catEnt) {
+	public ResponseEntity<CategoriaEntity> update(@PathVariable Integer id, @RequestBody CategoriaEntity catEnt) throws IdNotFoundException {
 		return ResponseEntity.ok().header("Method: ", "Update").body(service.update(id, catEnt));
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<String> delete(@PathVariable Integer id) {
+	public ResponseEntity<String> delete(@PathVariable Integer id) throws IdNotFoundException {
 		service.delete(id);
 		return ResponseEntity.ok("Deletado com sucesso!");
 	}

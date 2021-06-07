@@ -2,19 +2,15 @@ package com.example.demo.entities;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreType;
 
 @Entity
 @Table
@@ -28,7 +24,7 @@ public class CategoriaEntity {
 	
 	private String descricao;
 
-	@JsonBackReference
+//	@JsonBackReference
 	@OneToMany(mappedBy = "categoria")
 	private List<ProdutoEntity> produtos = new ArrayList<>();
 
