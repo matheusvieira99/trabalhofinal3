@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException;
 
 import com.example.demo.DTO.EnderecoDTO;
+import com.example.demo.exceptions.IdNotFoundException;
 import com.example.demo.services.EnderecoService;
 
 @RestController
@@ -41,7 +42,7 @@ public class EnderecoController {
 	//return new ResponseEntity<TodoEntity>(body, headers, HttpStatus.OK);
 	
 	@GetMapping("/{id}")
-	public EnderecoDTO getById(@PathVariable Integer id){
+	public EnderecoDTO getById(@PathVariable Integer id) throws IdNotFoundException{
 	 
 	
 	return	service.buscarId(id);
@@ -53,7 +54,7 @@ public class EnderecoController {
 //	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<String> delete(@PathVariable Integer id) {
+	public ResponseEntity<String> delete(@PathVariable Integer id) throws IdNotFoundException {
 		service.delete(id);
 		return ResponseEntity.ok("Deletado com sucesso!");
 	}

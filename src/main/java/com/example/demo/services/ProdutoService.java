@@ -7,8 +7,10 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.entities.CategoriaEntity;
+import com.example.demo.DTO.ProdutoDTO;
 import com.example.demo.entities.ProdutoEntity;
+import com.example.demo.exceptions.IdNotFoundException;
+import com.example.demo.mapper.ProdutoMapper;
 import com.example.demo.repositories.CategoriaRepository;
 import com.example.demo.repositories.ProdutoRepository;
 
@@ -21,41 +23,53 @@ public class ProdutoService {
 	@Autowired
 	CategoriaRepository repoCategoria;
 	
+	@Autowired
+	ProdutoMapper mapper;
 	
-	public List<ProdutoEntity> findAll(){
-		return repo.findAll();
+	
+	public List<ProdutoDTO> findAll(){
+		List<ProdutoEntity> list = new ArrayList<>();
+		list.addAll(repo.findAll());
+		List<ProdutoDTO> listDTO = new ArrayList<>();
+		for (ProdutoEntity produtoEntity : list) {
+			listDTO.add(mapper.toDTO(produtoEntity));
+		}
+		return listDTO;
 	}
 	
-	public ProdutoEntity create(ProdutoEntity prodObj) {
-		prodObj.setCategoria(repoCategoria.getById(prodObj.getCodigoCategoria()));
-		
-		
-		
-		return repo.save(prodObj);
+	public ProdutoDTO create(ProdutoDTO prodDTO) {
+		prodDTO.setCategoria(repoCategoria.getById(prodDTO.getCodigoCategoria()));
+		repo.save(mapper.toEntity(prodDTO));
+		return prodDTO;
 	}
 
-	public Optional<ProdutoEntity> getById(Integer id) {
-		Optional<ProdutoEntity> prodReturn = repo.findById(id);
+	public ProdutoDTO getById(Integer id) throws IdNotFoundException {
+		
+		if(repo.findById(id).isEmpty()) {
+			throw new IdNotFoundException("Id não encontrado!");
+		}
+		ProdutoDTO prodReturn = mapper.toDTO(repo.findById(id).get());
+		
 		return prodReturn;
 	}
 
-	public ProdutoEntity update(Integer id, ProdutoEntity catEnt) {
-		ProdutoEntity  catNew = catEnt;
+	public ProdutoDTO update(Integer id, ProdutoDTO prodEnt) throws IdNotFoundException {
+		ProdutoDTO  prodNew = prodEnt;
 		
-		ProdutoEntity cat = repo.getById(id);
+		ProdutoEntity prod = mapper.toEntity(getById(id));
 		
-		if(catNew.getNome() != null) {
-			cat.setNome(catNew.getNome());
+		if(prodNew.getNome() != null) {
+			prod.setNome(prodNew.getNome());
 		}
 		
-		if(catNew.getDescricao()!= null) {
-			cat.setDescricao(catNew.getDescricao());
+		if(prodNew.getDescricao()!= null) {
+			prod.setDescricao(prodNew.getDescricao());
 		}
-		
-		return repo.save(cat);
+		return mapper.toDTO(repo.save(prod));
 	}
 
-	public void delete(Integer id) {
+	public void delete(Integer id) throws IdNotFoundException {
+		getById(id);
 		repo.deleteById(id);
 	}
 }

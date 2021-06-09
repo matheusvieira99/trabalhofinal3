@@ -1,27 +1,12 @@
-package com.example.demo.entities;
+package com.example.demo.DTO;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
+import com.example.demo.entities.CategoriaEntity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-@Entity
-@Table
-public class ProdutoEntity {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+public class ProdutoDTO {
 	
 	private String nome;
 	
@@ -38,25 +23,10 @@ public class ProdutoEntity {
 	@JsonBackReference
 	private Integer codigoCategoria;
 	
-//	@JsonIgnore
-	@OneToMany(mappedBy="produtoItem")
-	private Set<ProdutosPedidos> itemPedido = new HashSet<>();
-	
 //	@GeneratedValue(strategy=GenerationType.TABLE)
 
-	@ManyToOne
 	@JsonIgnore
 	private CategoriaEntity categoria;
-
-	
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
 
 	public String getNome() {
 		return nome;
@@ -106,14 +76,6 @@ public class ProdutoEntity {
 		this.imagem = imagem;
 	}
 
-	public CategoriaEntity getCategoria() {
-		return categoria;
-	}
-
-	public void setCategoria(CategoriaEntity categoria) {
-		this.categoria = categoria;
-	}
-
 	public Integer getCodigoCategoria() {
 		return codigoCategoria;
 	}
@@ -122,14 +84,13 @@ public class ProdutoEntity {
 		this.codigoCategoria = codigoCategoria;
 	}
 
-	public Set<ProdutosPedidos> getItemPedido() {
-		return itemPedido;
+	public CategoriaEntity getCategoria() {
+		return categoria;
 	}
 
-	public void setItemPedido(Set<ProdutosPedidos> itemPedido) {
-		this.itemPedido = itemPedido;
+	public void setCategoria(CategoriaEntity categoria) {
+		this.categoria = categoria;
 	}
-
 
 	
 	

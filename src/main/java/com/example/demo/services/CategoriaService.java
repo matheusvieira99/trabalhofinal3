@@ -1,13 +1,17 @@
 package com.example.demo.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.DTO.CategoriaDTO;
 import com.example.demo.entities.CategoriaEntity;
 import com.example.demo.exceptions.IdNotFoundException;
+import com.example.demo.mapper.CategoriaMapper;
 import com.example.demo.repositories.CategoriaRepository;
 
 @Service
@@ -16,28 +20,41 @@ public class CategoriaService {
 	@Autowired
 	CategoriaRepository repo;
 	
-	public List<CategoriaEntity> findAll(){
-		return repo.findAll();
+	@Autowired
+	CategoriaMapper mapper;
+	
+	public List<CategoriaDTO> findAll(){
+		List<CategoriaEntity> listEnt = repo.findAll();
+		List<CategoriaDTO> listDTO = new ArrayList<>();
+		
+		for (CategoriaEntity categoriaEntity : listEnt) {
+			listDTO.add( mapper.toDTO(categoriaEntity));
+		}
+		return listDTO;
 	}
 	
-	public CategoriaEntity create(CategoriaEntity catObj) throws IdNotFoundException  {
+	public CategoriaDTO create(CategoriaDTO catObj) throws IdNotFoundException  {
+		
+		CategoriaEntity catEnt = (mapper.toEntity(catObj));
 	
-		return repo.save(catObj);
+		
+		return mapper.toDTO(repo.save(catEnt));
 	}
 
-	public Optional<CategoriaEntity> buscarId(Integer id) throws IdNotFoundException {
-	Optional<CategoriaEntity> catReturn = repo.findById(id);
-		if(catReturn.isEmpty()) {
+	public CategoriaDTO buscarId(Integer id) throws IdNotFoundException {
+	CategoriaDTO catReturn =mapper.toDTO(repo.findById(id).get());
+		if(repo.findById(id).isEmpty()) {
 			throw new IdNotFoundException ("Id não encontrado!");
 		}
 	
 		return catReturn;
 	}
 
-	public CategoriaEntity update(Integer id, CategoriaEntity catEnt) throws IdNotFoundException  {
-		CategoriaEntity  catNew = catEnt;
+	public CategoriaDTO update(Integer id, CategoriaDTO catDTO) throws IdNotFoundException  {
 		
-		CategoriaEntity cat = repo.getById(id);
+		buscarId(id);
+		CategoriaDTO  catNew = catDTO;
+		CategoriaEntity cat =repo.getById(id);
 		
 		if(catNew.getNome() != null) {
 			cat.setNome(catNew.getNome());
@@ -47,11 +64,16 @@ public class CategoriaService {
 			cat.setDescricao(catNew.getDescricao());
 		}
 		
-		return repo.save(cat);
+		return mapper.toDTO(repo.save(cat));
 	}
 
-	public void delete(Integer id) throws IdNotFoundException  {
+	public void delete(Integer id) throws IdNotFoundException, DataIntegrityViolationException  {
+		buscarId(id);
+		try {
 		repo.deleteById(id);
+		} catch (DataIntegrityViolationException e) {
+			throw new DataIntegrityViolationException ("Não é possível excluir uma categoria que possui produtos!");
+		}
 	}
 	
 }

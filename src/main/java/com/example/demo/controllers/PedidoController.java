@@ -16,44 +16,44 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.DTO.ProdutoDTO;
-import com.example.demo.entities.ProdutoEntity;
+import com.example.demo.DTO.PedidoDTO;
+import com.example.demo.entities.PedidoEntity;
 import com.example.demo.exceptions.IdNotFoundException;
-import com.example.demo.services.ProdutoService;
+import com.example.demo.services.PedidoService;
 
 @RestController
 @RequestMapping("/produto")
-public class ProdutoController {
+public class PedidoController {
 		
 		@Autowired 
-		ProdutoService service;
+		PedidoService service;
 		
 		@GetMapping
-		public ResponseEntity<List<ProdutoDTO>> findAll () {
+		public ResponseEntity<List<PedidoDTO>> findAll () {
 			return ResponseEntity.ok().header("Method: ", "Find All").body(service.findAll());
 		}
 		
 		@PostMapping
-		public ResponseEntity<ProdutoDTO> create (@RequestBody ProdutoDTO prodObj){
+		public ResponseEntity<PedidoDTO> create (@RequestBody PedidoDTO prodObj){
 			HttpHeaders headers = new HttpHeaders();
 			headers.add("Method: ", "Create");
-			ProdutoDTO body = service.create(prodObj);
+			PedidoDTO body = service.create(prodObj);
 			
-			return new ResponseEntity<ProdutoDTO>(body,headers,HttpStatus.CREATED);
+			return new ResponseEntity<PedidoDTO>(body,headers,HttpStatus.CREATED);
 		}
 
 		@GetMapping("/{id}")
-		public ResponseEntity<ProdutoDTO> findById(@PathVariable Integer id) throws IdNotFoundException{
+		public ResponseEntity<PedidoDTO> findById(@PathVariable Long id) throws IdNotFoundException{
 			return ResponseEntity.ok().header("Method: ", "Get By Id").body(service.getById(id));
 		}
 		
-		@PutMapping("/{id}")
-		public ResponseEntity<ProdutoDTO> update(@PathVariable Integer id, @RequestBody ProdutoDTO prodEnt) throws IdNotFoundException {
-			return ResponseEntity.ok().header("Method: ", "Update").body(service.update(id, prodEnt));
-		}
+//		@PutMapping("/{id}")
+//		public ResponseEntity<PedidoDTO> update(@PathVariable Integer id, @RequestBody PedidoDTO prodEnt) throws IdNotFoundException {
+//			return ResponseEntity.ok().header("Method: ", "Update").body(service.update(id, prodEnt));
+//		}
 		
 		@DeleteMapping("/{id}")
-		public ResponseEntity<String> delete(@PathVariable Integer id) throws IdNotFoundException {
+		public ResponseEntity<String> delete(@PathVariable Long id) throws IdNotFoundException {
 			service.delete(id);
 			return ResponseEntity.ok("Deletado com sucesso!");
 		}

@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.DTO.ClientDTO;
 import com.example.demo.entities.ClientEntity;
+import com.example.demo.exceptions.IdNotFoundException;
 import com.example.demo.services.ClientService;
 
 @RestController
@@ -27,34 +29,34 @@ public class ClientController {
 	ClientService service;
 	
 	@GetMapping
-	public ResponseEntity<List<ClientEntity>> findAll () {
+	public ResponseEntity<List<ClientDTO>> findAll () {
 		return ResponseEntity.ok().header("Method: ", "Find All").body(service.findAll());
 	}
 	
 	@PostMapping
-	public ResponseEntity<ClientEntity> create (@RequestBody ClientEntity catObj){
+	public ResponseEntity<ClientDTO> create (@RequestBody ClientDTO catObj){
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("Method: ", "Create");
-		ClientEntity body = service.create(catObj);
+		ClientDTO body = service.create(catObj);
 		
-		return new ResponseEntity<ClientEntity>(body,headers,HttpStatus.CREATED);
+		return new ResponseEntity<ClientDTO>(body,headers,HttpStatus.CREATED);
 	}
 	//return new ResponseEntity<TodoEntity>(body, headers, HttpStatus.OK);
 	
 	@GetMapping("/{id}")
-	public Optional<ClientEntity> getById(@PathVariable Integer id){
+	public ClientDTO getById(@PathVariable Integer id) throws IdNotFoundException{
 	 
 	
 	return	service.buscarId(id);
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<ClientEntity> update(@PathVariable Integer id, @RequestBody ClientEntity catEnt) {
+	public ResponseEntity<ClientDTO> update(@PathVariable Integer id, @RequestBody ClientDTO catEnt) throws IdNotFoundException {
 		return ResponseEntity.ok().header("Method: ", "Update").body(service.update(id, catEnt));
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<String> delete(@PathVariable Integer id) {
+	public ResponseEntity<String> delete(@PathVariable Integer id) throws IdNotFoundException {
 		service.delete(id);
 		return ResponseEntity.ok("Deletado com sucesso!");
 	}
