@@ -22,7 +22,7 @@ import com.example.demo.exceptions.IdNotFoundException;
 import com.example.demo.services.PedidoService;
 
 @RestController
-@RequestMapping("/produto")
+@RequestMapping("/pedido")
 public class PedidoController {
 		
 		@Autowired 

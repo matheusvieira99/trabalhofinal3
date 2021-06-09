@@ -1,7 +1,6 @@
 package com.example.demo.controllers;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -24,47 +23,42 @@ import com.example.demo.services.ClientService;
 @RestController
 @RequestMapping("/cliente")
 public class ClientController {
-	
-	@Autowired 
+
+	@Autowired
 	ClientService service;
-	
+
 	@GetMapping
-	public ResponseEntity<List<ClientDTO>> findAll () {
+	public ResponseEntity<List<ClientDTO>> findAll() {
 		return ResponseEntity.ok().header("Method: ", "Find All").body(service.findAll());
 	}
-	
+
 	@PostMapping
-	public ResponseEntity<ClientDTO> create (@RequestBody ClientDTO catObj){
+	public ResponseEntity<ClientDTO> create(@RequestBody ClientDTO catObj) {
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("Method: ", "Create");
 		ClientDTO body = service.create(catObj);
-		
-		return new ResponseEntity<ClientDTO>(body,headers,HttpStatus.CREATED);
+
+		return new ResponseEntity<ClientDTO>(body, headers, HttpStatus.CREATED);
 	}
-	//return new ResponseEntity<TodoEntity>(body, headers, HttpStatus.OK);
-	
+	// return new ResponseEntity<TodoEntity>(body, headers, HttpStatus.OK);
+
 	@GetMapping("/{id}")
-	public ClientDTO getById(@PathVariable Integer id) throws IdNotFoundException{
-	 
-	
-	return	service.buscarId(id);
+	public ClientDTO getById(@PathVariable Integer id) throws IdNotFoundException {
+
+		return service.buscarId(id);
 	}
-	
+
 	@PutMapping("/{id}")
-	public ResponseEntity<ClientDTO> update(@PathVariable Integer id, @RequestBody ClientDTO catEnt) throws IdNotFoundException {
-		return ResponseEntity.ok().header("Method: ", "Update").body(service.update(id, catEnt));
+	public ResponseEntity<ClientDTO> update(@PathVariable Integer id, @RequestBody ClientDTO catDTO)
+			throws IdNotFoundException {
+
+		return ResponseEntity.ok().header("Method: ", "Update").body(service.update(id, catDTO));
 	}
-	
+
 	@DeleteMapping("/{id}")
 	public ResponseEntity<String> delete(@PathVariable Integer id) throws IdNotFoundException {
 		service.delete(id);
 		return ResponseEntity.ok("Deletado com sucesso!");
 	}
-	
-
-	
-	
-	
-	
 
 }

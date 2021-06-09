@@ -6,9 +6,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class EnderecoDTO {
 
+
 	
 	@JsonIgnore
 	private ClientEntity client;
+	
+	private Integer codigoEndereco;
 	
 	private String rua;
 	
@@ -101,6 +104,14 @@ public class EnderecoDTO {
 
 	public String getEstado() {
 		return Estado;
+	}
+
+	public Integer getCodigoEndereco() {
+		return codigoEndereco;
+	}
+
+	public void setCodigoEndereco(Integer codigoEndereco) {
+		this.codigoEndereco = codigoEndereco;
 	}
 	
 	
