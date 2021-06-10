@@ -137,21 +137,11 @@ public class ClientService {
 	for (EnderecoEntity enderecoEntity : list) {
 		enderecoRepo.delete(enderecoEntity);
 	}
-//		repo.getById(id).getEnderecoId().removeAll(null);
-//		enderecoRepo.getById(id).setCliente(null);
-//		
 	
-//		for(Integer i=0; i<repo.getById(id).getEnderecoId().size(); i++) {
-//			enderecoService.delete(repo.getById(id).getEnderecoId().get(i).getId());
-//		}
-
-		
 		repo.deleteById(id);
 	}
 	
-	public void updateData(ClientEntity newObj, ClientEntity obj) {
-		newObj.setTelefone(obj.getTelefone());
-	}
+	
 	
 	
 	

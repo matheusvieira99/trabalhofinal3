@@ -6,4 +6,6 @@ import com.example.demo.entities.ProdutoEntity;
 
 public interface ProdutoRepository extends JpaRepository<ProdutoEntity, Integer> {
 
+	
+
 }

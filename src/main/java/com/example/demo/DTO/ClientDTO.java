@@ -30,6 +30,8 @@ public class ClientDTO {
 	private LocalDate dataNascimento;
 	
 	
+	
+	
 	private List<EnderecoDTO> enderecoId = new ArrayList<>();
 
 

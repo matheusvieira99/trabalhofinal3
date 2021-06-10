@@ -44,7 +44,7 @@ public class ProdutoService {
 	}
 
 	public ProdutoDTO getById(Integer id) throws IdNotFoundException {
-		
+		System.out.println(id);
 		if(repo.findById(id).isEmpty()) {
 			throw new IdNotFoundException("Id não encontrado!");
 		}

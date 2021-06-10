@@ -91,6 +91,16 @@ public class PedidoEntity {
 		public void setCliente(ClientEntity cliente) {
 			this.cliente = cliente;
 		}
+
+		public Set<ProdutosPedidos> getListaProdutos() {
+			return listaProdutos;
+		}
+
+		public void setListaProdutos(Set<ProdutosPedidos> listaProdutos) {
+			this.listaProdutos = listaProdutos;
+		}
+
+	
 		
 		
 		

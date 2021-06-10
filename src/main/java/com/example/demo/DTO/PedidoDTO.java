@@ -1,8 +1,13 @@
 package com.example.demo.DTO;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.OneToMany;
 
 import com.example.demo.entities.ClientEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class PedidoDTO {
 	
@@ -19,6 +24,10 @@ public class PedidoDTO {
 	
 	private String status;
 	
+	
+	private Set<ProdutosPedidosDTO> listaProdutos = new HashSet<>();
+	
+	@JsonIgnore
 	private ClientEntity cliente;
 
 	public Long getId() {
@@ -75,6 +84,14 @@ public class PedidoDTO {
 
 	public void setCliente(ClientEntity cliente) {
 		this.cliente = cliente;
+	}
+
+	public Set<ProdutosPedidosDTO> getListaProdutos() {
+		return listaProdutos;
+	}
+
+	public void setListaProdutos(Set<ProdutosPedidosDTO> listaProdutos) {
+		this.listaProdutos = listaProdutos;
 	}
 	
 	

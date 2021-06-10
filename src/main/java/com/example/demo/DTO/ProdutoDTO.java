@@ -8,6 +8,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class ProdutoDTO {
 	
+
+	
 	private String nome;
 	
 	private String descricao;
@@ -91,6 +93,8 @@ public class ProdutoDTO {
 	public void setCategoria(CategoriaEntity categoria) {
 		this.categoria = categoria;
 	}
+
+
 
 	
 	

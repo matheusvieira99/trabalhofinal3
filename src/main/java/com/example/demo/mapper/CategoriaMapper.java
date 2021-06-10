@@ -16,7 +16,7 @@ import com.example.demo.repositories.ProdutoRepository;
 public class CategoriaMapper {
 	
 	@Autowired 
-	ProdutoRepository prodRepo;
+	ProdutoRepository produtoRepo;
 	
 	@Autowired
 	ProdutoMapper mapper;
@@ -28,7 +28,7 @@ public class CategoriaMapper {
 		dto.setNome(catEnt.getNome());
 		dto.setDescricao(catEnt.getDescricao());
 		
-		List<ProdutoEntity> listEnt = prodRepo.findAll();
+		List<ProdutoEntity> listEnt = produtoRepo.findAll();
 		List<ProdutoDTO> listDTO = new ArrayList<>();
 		for (ProdutoEntity prodEnt : listEnt) {
 			listDTO.add(mapper.toDTO(prodEnt));

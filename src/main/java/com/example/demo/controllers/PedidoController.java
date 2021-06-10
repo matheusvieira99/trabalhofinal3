@@ -28,19 +28,21 @@ public class PedidoController {
 		@Autowired 
 		PedidoService service;
 		
+		
+		
 		@GetMapping
 		public ResponseEntity<List<PedidoDTO>> findAll () {
 			return ResponseEntity.ok().header("Method: ", "Find All").body(service.findAll());
 		}
 		
-		@PostMapping
-		public ResponseEntity<PedidoDTO> create (@RequestBody PedidoDTO prodObj){
-			HttpHeaders headers = new HttpHeaders();
-			headers.add("Method: ", "Create");
-			PedidoDTO body = service.create(prodObj);
-			
-			return new ResponseEntity<PedidoDTO>(body,headers,HttpStatus.CREATED);
-		}
+//		@PostMapping
+//		public ResponseEntity<PedidoDTO> create (@RequestBody PedidoDTO prodObj){
+//			HttpHeaders headers = new HttpHeaders();
+//			headers.add("Method: ", "Create");
+//			PedidoDTO body = service.create(prodObj);
+//			
+//			return new ResponseEntity<PedidoDTO>(body,headers,HttpStatus.CREATED);
+//		}
 
 		@GetMapping("/{id}")
 		public ResponseEntity<PedidoDTO> findById(@PathVariable Long id) throws IdNotFoundException{
@@ -56,6 +58,13 @@ public class PedidoController {
 		public ResponseEntity<String> delete(@PathVariable Long id) throws IdNotFoundException {
 			service.delete(id);
 			return ResponseEntity.ok("Deletado com sucesso!");
+		}
+		
+		@PostMapping("/{clientId}/pedido")
+		public ResponseEntity<String> inserirPedido(@PathVariable Integer clientId, @RequestBody PedidoDTO pedDTO) throws IdNotFoundException {
+	
+			service.createPedido(pedDTO, clientId);
+			return ResponseEntity.ok("Pedido Inserido com sucesso!");
 		}
 
 }

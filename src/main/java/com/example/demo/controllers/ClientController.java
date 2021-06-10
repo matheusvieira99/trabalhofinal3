@@ -16,9 +16,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.DTO.ClientDTO;
-import com.example.demo.entities.ClientEntity;
+import com.example.demo.DTO.PedidoDTO;
 import com.example.demo.exceptions.IdNotFoundException;
+import com.example.demo.mapper.ProdutoMapper;
+import com.example.demo.repositories.ProdutoRepository;
 import com.example.demo.services.ClientService;
+import com.example.demo.services.PedidoService;
+import com.example.demo.services.ProdutoService;
 
 @RestController
 @RequestMapping("/cliente")
@@ -26,6 +30,18 @@ public class ClientController {
 
 	@Autowired
 	ClientService service;
+	
+	@Autowired
+	PedidoService servicePedido;
+	
+	@Autowired
+	ProdutoService produtoService;
+	
+	@Autowired
+	ProdutoMapper mapperProd;	
+	
+	@Autowired
+	ProdutoRepository repoProd;
 
 	@GetMapping
 	public ResponseEntity<List<ClientDTO>> findAll() {
@@ -59,6 +75,13 @@ public class ClientController {
 	public ResponseEntity<String> delete(@PathVariable Integer id) throws IdNotFoundException {
 		service.delete(id);
 		return ResponseEntity.ok("Deletado com sucesso!");
+	}
+	
+
+	@GetMapping("/{id}/pedidos")
+	public ResponseEntity<List<PedidoDTO>> getAllPedidos(@PathVariable  Integer id){
+	  List<PedidoDTO> list = servicePedido.findAllById(id);
+		return ResponseEntity.ok().body(list);
 	}
 
 }
