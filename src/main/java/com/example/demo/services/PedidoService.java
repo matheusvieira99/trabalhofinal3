@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.DTO.PedidoDTO;
 import com.example.demo.DTO.ProdutosPedidosDTO;
+import com.example.demo.config.MailConfig;
 import com.example.demo.entities.PedidoEntity;
 import com.example.demo.entities.ProdutoEntity;
 import com.example.demo.entities.ProdutosPedidos;
@@ -46,6 +47,9 @@ public class PedidoService {
 	
 	@Autowired 
 	ProdutoMapper produtoMapper;
+	
+	@Autowired
+	MailConfig send;
 
 	public List<PedidoDTO> findAll() {
 		List<PedidoEntity> list = new ArrayList<>();
@@ -63,6 +67,7 @@ public class PedidoService {
 		
 		for (ProdutosPedidosDTO produto : pedDTO.getListaProdutos()) {
 			System.out.println(produto.toString());
+			//criar metodo para dentro da API getBYid retornando a entidade;
 			ProdutoEntity produtoFind =mapperProd.toEntity(serviceProduto.getById(produto.getId()));
 			produtoFind.setId(produto.getId());
 			ProdutosPedidos prodPed = new ProdutosPedidos();
@@ -74,7 +79,7 @@ public class PedidoService {
 			prodPedRepository.save(prodPed);
 		}
 		
-		
+		send.sendMail("falmeida.1305@gmail.com", "Trabalho", "Pedido cadastrado com sucesso!");
 				
 			
 		
