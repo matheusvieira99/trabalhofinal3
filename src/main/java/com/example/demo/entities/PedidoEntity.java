@@ -100,6 +100,13 @@ public class PedidoEntity {
 			this.listaProdutos = listaProdutos;
 		}
 
+		@Override
+		public String toString() {
+			return "PedidoEntity [id=" + id + ", numeroDoPedido=" + numeroDoPedido + ", valorTotalDoPedido="
+					+ valorTotalDoPedido + ", dataDoPedido=" + dataDoPedido + ", dataDaEntrega=" + dataDaEntrega
+					+ ", status=" + status + ", cliente=" + cliente + ", listaProdutos=" + listaProdutos + "]";
+		}
+
 	
 		
 		

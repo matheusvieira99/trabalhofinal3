@@ -68,9 +68,9 @@ public class PedidoController {
 		}
 		
 		@RequestMapping(value="/emailsend", method = RequestMethod.POST) 
-	    public String sendMail() {
+	    public String sendMail() throws IdNotFoundException {
 	        SimpleMailMessage message = new SimpleMailMessage();
-	        message.setText("Pedido cadastrado com sucesso");
+	        message.setText("Pedido cadastrado com sucesso"+(service.getById((long) 14)));
 	        message.setTo("falmeida.1305@gmail.com");
 	        message.setSubject("trabalho");
 	        message.setFrom("trabalhoapiserratec@gmail.com");

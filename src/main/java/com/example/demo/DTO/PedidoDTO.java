@@ -93,6 +93,13 @@ public class PedidoDTO {
 	public void setListaProdutos(Set<ProdutosPedidosDTO> listaProdutos) {
 		this.listaProdutos = listaProdutos;
 	}
+
+	@Override
+	public String toString() {
+		return "\nPedidoDTO \nId=" + id + "\n\nNumero Do Pedido=" + numeroDoPedido + "\n\nValorTotalDoPedido="
+				+ valorTotalDoPedido + "\n\nData Do Pedido=" + dataDoPedido + "\n\nDataDaEntrega=" + dataDaEntrega
+				+ "\n\nStatus=" + status + "\n\nListaProdutos=" + listaProdutos + "\n\nCliente=" + cliente;
+	}
 	
 	
 
