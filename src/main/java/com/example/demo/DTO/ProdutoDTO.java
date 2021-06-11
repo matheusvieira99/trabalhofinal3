@@ -3,12 +3,13 @@ package com.example.demo.DTO;
 import java.time.LocalDate;
 
 import com.example.demo.entities.CategoriaEntity;
+import com.example.demo.entities.ProdutoEntity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class ProdutoDTO {
 	
-
+	private Integer id;
 	
 	private String nome;
 	
@@ -27,12 +28,28 @@ public class ProdutoDTO {
 	
 //	@GeneratedValue(strategy=GenerationType.TABLE)
 
+	
+	
 	@JsonIgnore
 	private CategoriaEntity categoria;
+	
+public ProdutoDTO() {
+	super();
+}
+
+//	public ProdutoDTO(ProdutoEntity obj) {
+//		this.id = obj.getId();
+//		this.nome = obj.getNome();
+//		this.preco = obj.getPreco();
+//	}
+
+
 
 	public String getNome() {
 		return nome;
 	}
+
+
 
 	public void setNome(String nome) {
 		this.nome = nome;
@@ -92,6 +109,18 @@ public class ProdutoDTO {
 
 	public void setCategoria(CategoriaEntity categoria) {
 		this.categoria = categoria;
+	}
+
+
+
+	public Integer getId() {
+		return id;
+	}
+
+
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 
