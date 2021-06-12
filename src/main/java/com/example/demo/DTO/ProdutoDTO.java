@@ -21,7 +21,9 @@ public class ProdutoDTO {
 	
 	private LocalDate dataCadastro;
 	
-	private String imagem;
+	private byte[] imagem;
+	
+	private String url;
 	
 	@JsonBackReference
 	private Integer codigoCategoria;
@@ -87,12 +89,12 @@ public ProdutoDTO() {
 		this.dataCadastro = dataCadastro;
 	}
 
-	public String getImagem() {
+	public byte[] getImagem() {
 		return imagem;
 	}
 
-	public void setImagem(String imagem) {
-		this.imagem = imagem;
+	public void setImagem(byte[] bs) {
+		this.imagem = bs;
 	}
 
 	public Integer getCodigoCategoria() {
@@ -122,11 +124,21 @@ public ProdutoDTO() {
 	public void setId(Integer id) {
 		this.id = id;
 	}
+	
+	public String getUrl() {
+		return url;
+	}
+	
+	public void setUrl(String url) {
+		this.url = url;
+	}
+	
 
 	@Override
 	public String toString() {
 		return "\nProduto  Nome: " + nome + "\nPreco: " + preco + "\n\n";
 	}
+
 
 
 

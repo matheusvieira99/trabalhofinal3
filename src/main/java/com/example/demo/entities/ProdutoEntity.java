@@ -33,7 +33,7 @@ public class ProdutoEntity {
 	
 	private LocalDate dataCadastro;
 	
-	private String imagem;
+	private byte[] imagem;
 	
 	@JsonBackReference
 	private Integer codigoCategoria;
@@ -98,12 +98,12 @@ public class ProdutoEntity {
 		this.dataCadastro = dataCadastro;
 	}
 
-	public String getImagem() {
+	public byte[] getImagem() {
 		return imagem;
 	}
 
-	public void setImagem(String imagem) {
-		this.imagem = imagem;
+	public void setImagem(byte[] bs) {
+		this.imagem = bs;
 	}
 
 	public CategoriaEntity getCategoria() {

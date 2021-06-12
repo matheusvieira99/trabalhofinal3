@@ -1,5 +1,7 @@
 package com.example.demo.services;
 
+import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -9,6 +11,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.example.demo.DTO.ProdutoDTO;
 import com.example.demo.entities.CategoriaEntity;
@@ -92,5 +96,24 @@ public class ProdutoService {
 		ProdutoEntity prodReturn = repo.findById(id).get();
 		
 		return prodReturn;
+	}
+	
+	private ProdutoDTO addImageUrl(ProdutoEntity entity) {
+		URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/pedido/{id}/image")
+				.buildAndExpand(entity.getId()).toUri();
+		ProdutoDTO produto = new ProdutoDTO();
+		produto.setUrl(uri.toString());
+		return produto;
+	}
+	
+	
+	
+	public ProdutoDTO createImage(ProdutoEntity produtoEntity, MultipartFile file) throws IOException {
+		produtoEntity.setImagem(file.getBytes());
+		repo.save(produtoEntity);
+		ProdutoDTO produto = new ProdutoDTO();
+		produto.setNome(produtoEntity.getNome());
+		produto.setDescricao(produtoEntity.getDescricao());
+		return produto;
 	}
 }
