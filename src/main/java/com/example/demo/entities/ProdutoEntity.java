@@ -132,11 +132,10 @@ public class ProdutoEntity {
 
 	@Override
 	public String toString() {
-		return "ProdutoEntity [id=" + id + ", nome=" + nome + ", descricao=" + descricao + ", preco=" + preco
-				+ ", quantidadeEmEstoque=" + quantidadeEmEstoque + ", dataCadastro=" + dataCadastro + ", imagem="
-				+ imagem + ", codigoCategoria=" + codigoCategoria + ", itemPedido=" + itemPedido + ", categoria="
-				+ categoria + "]";
+		return "Nome: " + nome + "\n Preco=" + preco;
 	}
+
+
 
 
 	

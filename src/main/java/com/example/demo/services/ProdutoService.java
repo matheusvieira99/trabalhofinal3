@@ -83,4 +83,14 @@ public class ProdutoService {
 //		List<CategoriaEntity> categorias = repoCategoria.findAllById(ids);
 		return repo.search(nome,pageRequest);
 	}
+	
+	public ProdutoEntity getByIdInterno(Integer id) throws IdNotFoundException {
+		
+		if(repo.findById(id).isEmpty()) {
+			throw new IdNotFoundException("Id não encontrado!");
+		}
+		ProdutoEntity prodReturn = repo.findById(id).get();
+		
+		return prodReturn;
+	}
 }

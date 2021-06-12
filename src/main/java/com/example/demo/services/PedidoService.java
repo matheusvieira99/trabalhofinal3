@@ -1,14 +1,20 @@
 package com.example.demo.services;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.DTO.PedidoDTO;
 import com.example.demo.DTO.ProdutosPedidosDTO;
-import com.example.demo.config.MailConfig;
 import com.example.demo.entities.PedidoEntity;
 import com.example.demo.entities.ProdutoEntity;
 import com.example.demo.entities.ProdutosPedidos;
@@ -25,31 +31,33 @@ public class PedidoService {
 
 	@Autowired
 	PedidoRepository repo;
-	
+
 	@Autowired
 	ProdutosPedidosRepository prodPedRepository;
-	
+
 	@Autowired
 	ClientRepository clientRepo;
-	
+
 	@Autowired
 	ProdutoRepository produtoRepo;
-	
+
 	@Autowired
 	ProdutoService serviceProduto;
-	
+
 	@Autowired
 	ProdutoMapper mapperProd;
-	
 
 	@Autowired
 	PedidoMapper mapper;
-	
-	@Autowired 
-	ProdutoMapper produtoMapper;
-	
+
 	@Autowired
-	MailConfig send;
+	ProdutoMapper produtoMapper;
+
+	@Autowired
+	JavaMailSender javaMailSender;
+
+//	@Autowired
+//	MailConfig send;
 
 	public List<PedidoDTO> findAll() {
 		List<PedidoEntity> list = new ArrayList<>();
@@ -62,29 +70,80 @@ public class PedidoService {
 	}
 
 	public PedidoDTO createPedido(PedidoDTO pedDTO, Integer id) throws IdNotFoundException {
+		Double valorTotal = 0.0;
 		pedDTO.setCliente(clientRepo.findById(id).get());
+
 		PedidoEntity pedidoSaved = repo.save(mapper.toEntity(pedDTO));
-		
 		for (ProdutosPedidosDTO produto : pedDTO.getListaProdutos()) {
-			System.out.println(produto.toString());
-			//criar metodo para dentro da API getBYid retornando a entidade;
-			ProdutoEntity produtoFind =mapperProd.toEntity(serviceProduto.getById(produto.getId()));
+
+			ProdutoEntity produtoFind = serviceProduto.getByIdInterno(produto.getId());
 			produtoFind.setId(produto.getId());
 			ProdutosPedidos prodPed = new ProdutosPedidos();
 			prodPed.setPedido(pedidoSaved);
-			prodPed.setPreco((double)produtoFind.getPreco());
+			prodPed.setPreco((double) serviceProduto.getByIdInterno(produto.getId()).getPreco());
 			prodPed.setProduto(produtoFind);
 			prodPed.setQuantidade(produto.getQuantidade());
-			System.out.println(produtoFind);
+//			System.out.println(produtoFind);
 			prodPedRepository.save(prodPed);
+			valorTotal += serviceProduto.getByIdInterno(produto.getId()).getPreco() * produto.getQuantidade();
+			produtoFind.setQuantidadeEmEstoque(produtoFind.getQuantidadeEmEstoque() - (produto.getQuantidade()));
+			produtoRepo.save(produtoFind);
+
 		}
-		
-		send.sendMail("falmeida.1305@gmail.com", "Trabalho", "Pedido cadastrado com sucesso!");
-				
-			
-		
-		
+
+		pedidoSaved.setStatus("Pendente");
+		pedidoSaved.setDataDoPedido(LocalDate.now());
+		pedidoSaved.setValorTotalDoPedido(valorTotal);
+		repo.save(pedidoSaved);
+
+//		send.sendMail("falmeida.1305@gmail.com", "Trabalho", "Pedido cadastrado com sucesso!");
+
 		return pedDTO;
+	}
+
+	public void inserirItem(PedidoDTO pedDTO, Long pedidoId, Integer clientId) throws IdNotFoundException {
+		PedidoEntity pedido = repo.findById(pedidoId).get();
+		Double valorTotal = 0.0;
+		for (ProdutosPedidosDTO produto : pedDTO.getListaProdutos()) {
+			ProdutoEntity produtoFind = serviceProduto.getByIdInterno(produto.getId());
+			produtoFind.setId(produto.getId());
+			ProdutosPedidos prodPed = new ProdutosPedidos();
+			prodPed.setPedido(pedido);
+			prodPed.setPreco((double) serviceProduto.getByIdInterno(produto.getId()).getPreco());
+			prodPed.setProduto(produtoFind);
+			prodPed.setQuantidade(produto.getQuantidade());
+			prodPedRepository.save(prodPed);
+			valorTotal += serviceProduto.getByIdInterno(produto.getId()).getPreco() * produto.getQuantidade();
+			produtoFind.setQuantidadeEmEstoque(produtoFind.getQuantidadeEmEstoque() - (produto.getQuantidade()));
+			produtoRepo.save(produtoFind);
+		}
+		pedido.setValorTotalDoPedido(pedido.getValorTotalDoPedido() + valorTotal);
+		repo.save(pedido);
+	}
+
+	public void finalizarPedido(Long pedidoId, PedidoDTO pedDTO) throws IdNotFoundException {
+		System.out.println(pedDTO.getStatus());
+		if (pedDTO.getStatus().contains("finalizado")) {
+			PedidoEntity pedido = repo.findById(pedidoId).get();
+			pedido.setStatus("Finalizado");
+			
+			pedido.setDataDaEntrega(LocalDate.now().plusDays(10));
+			PedidoDTO dto = mapper.toDTO(repo.save(pedido));
+			sendMail(dto);
+		}
+	
+	}
+
+
+	public String sendMail(PedidoDTO pedido) throws IdNotFoundException {
+		SimpleMailMessage message = new SimpleMailMessage();
+		message.setText("Pedido finalizado com sucesso! \n\n" + pedido);
+		message.setTo("falmeida.1305@gmail.com");
+		message.setSubject("Pedido finalizado!");
+		message.setFrom("trabalhoapiserratec@gmail.com");
+
+		javaMailSender.send(message);
+		return "Email enviado com sucesso!";
 	}
 
 	public PedidoDTO getById(Long id) throws IdNotFoundException {
@@ -96,8 +155,6 @@ public class PedidoService {
 
 		return pedReturn;
 	}
-	
-	
 
 //	public PedidoDTO update(Integer id, PedidoDTO pedEnt) throws IdNotFoundException {
 //		PedidoDTO  pedNew = pedEnt;
@@ -117,11 +174,9 @@ public class PedidoService {
 		for (PedidoEntity pedidoEntity : list) {
 			listDTO.add(mapper.toDTO(pedidoEntity));
 		}
-		
-		
-		
+
 		return listDTO;
-		
-		
+
 	}
+
 }

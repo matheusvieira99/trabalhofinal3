@@ -4,6 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.example.demo.entities.ProdutosPedidos;
 
-public interface ProdutosPedidosRepository extends JpaRepository<ProdutosPedidos, Long>{
+public interface ProdutosPedidosRepository extends JpaRepository<ProdutosPedidos, Integer>{
 
 }

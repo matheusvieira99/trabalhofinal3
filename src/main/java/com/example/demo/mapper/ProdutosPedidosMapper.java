@@ -13,6 +13,7 @@ public class ProdutosPedidosMapper {
 		
 //		dto.setPedido(prodPedEnt.getPedido());
 //		dto.setProdutoItem(prodPedEnt.getProduto());
+		dto.setId(prodPedEnt.getId());
 		dto.setQuantidade(prodPedEnt.getQuantidade());
 		dto.setPreco(prodPedEnt.getPreco());
 		return dto;
@@ -23,6 +24,7 @@ public class ProdutosPedidosMapper {
 		
 //		entity.setPedido(dto.getPedido());
 //		entity.setProduto(dto.getProdutoItem());
+		entity.setId(dto.getId());
 		entity.setQuantidade(dto.getQuantidade());
 		entity.setPreco(dto.getPreco());
 		return entity;

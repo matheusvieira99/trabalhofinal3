@@ -22,19 +22,17 @@ import com.example.demo.services.PedidoService;
 @RestController
 @RequestMapping("/pedido")
 public class PedidoController {
-		
-		@Autowired 
-		PedidoService service;
-		
-		@Autowired JavaMailSender javaMailSender;
-		
-		
-		
-		@GetMapping
-		public ResponseEntity<List<PedidoDTO>> findAll () {
-			return ResponseEntity.ok().header("Method: ", "Find All").body(service.findAll());
-		}
-		
+
+	@Autowired
+	PedidoService service;
+
+
+
+	@GetMapping(value="/buscar-todos")
+	public ResponseEntity<List<PedidoDTO>> findAll() {
+		return ResponseEntity.ok().header("Method: ", "Find All").body(service.findAll());
+	}
+
 //		@PostMapping
 //		public ResponseEntity<PedidoDTO> create (@RequestBody PedidoDTO prodObj){
 //			HttpHeaders headers = new HttpHeaders();
@@ -44,39 +42,46 @@ public class PedidoController {
 //			return new ResponseEntity<PedidoDTO>(body,headers,HttpStatus.CREATED);
 //		}
 
-		@GetMapping("/{id}")
-		public ResponseEntity<PedidoDTO> findById(@PathVariable Long id) throws IdNotFoundException{
-			return ResponseEntity.ok().header("Method: ", "Get By Id").body(service.getById(id));
-		}
-		
+	@GetMapping("/{id}")
+	public ResponseEntity<PedidoDTO> findById(@PathVariable Long id) throws IdNotFoundException {
+		return ResponseEntity.ok().header("Method: ", "Get By Id").body(service.getById(id));
+	}
+
 //		@PutMapping("/{id}")
 //		public ResponseEntity<PedidoDTO> update(@PathVariable Integer id, @RequestBody PedidoDTO prodEnt) throws IdNotFoundException {
 //			return ResponseEntity.ok().header("Method: ", "Update").body(service.update(id, prodEnt));
 //		}
-		
-		@DeleteMapping("/{id}")
-		public ResponseEntity<String> delete(@PathVariable Long id) throws IdNotFoundException {
-			service.delete(id);
-			return ResponseEntity.ok("Deletado com sucesso!");
-		}
-		
-		@PostMapping("/{clientId}/pedido")
-		public ResponseEntity<String> inserirPedido(@PathVariable Integer clientId, @RequestBody PedidoDTO pedDTO) throws IdNotFoundException {
-	
-			service.createPedido(pedDTO, clientId);
-			return ResponseEntity.ok("Pedido Inserido com sucesso!");
-		}
-		
-		@RequestMapping(value="/emailsend", method = RequestMethod.POST) 
-	    public String sendMail() throws IdNotFoundException {
-	        SimpleMailMessage message = new SimpleMailMessage();
-	        message.setText("Pedido cadastrado com sucesso"+(service.getById((long) 14)));
-	        message.setTo("falmeida.1305@gmail.com");
-	        message.setSubject("trabalho");
-	        message.setFrom("trabalhoapiserratec@gmail.com");
-	       
-	        javaMailSender.send(message);
-	            return "Email enviado com sucesso!";
-	        }
+
+	@DeleteMapping("/delete/{id}")
+	public ResponseEntity<String> delete(@PathVariable Long id) throws IdNotFoundException {
+		service.delete(id);
+		return ResponseEntity.ok("Deletado com sucesso!");
+	}
+
+	@PostMapping("/create/{clientId}")
+	public ResponseEntity<String> inserirPedido(@PathVariable Integer clientId, @RequestBody PedidoDTO pedDTO)
+			throws IdNotFoundException {
+
+		service.createPedido(pedDTO, clientId);
+		return ResponseEntity.ok("Pedido Inserido com sucesso!");
+	}
+
+	@PostMapping("/inserir-item/{pedidoId}/{clientId}")
+	public ResponseEntity<String> inserirItem(@PathVariable Long pedidoId, @PathVariable Integer clientId,
+			@RequestBody PedidoDTO pedDTO) throws IdNotFoundException {
+		service.inserirItem(pedDTO, pedidoId, clientId);
+		return ResponseEntity.ok("Item inserido com sucesso!");
+	}
+
+	@PostMapping("/finalizar-pedido/{pedidoId}")
+	public ResponseEntity<String> finalizarPedido(@PathVariable Long pedidoId, @RequestBody PedidoDTO pedDTO)
+			throws IdNotFoundException {
+		service.finalizarPedido(pedidoId, pedDTO);
+		return ResponseEntity.ok(
+				"Pedido finalizado com sucesso! \nTe enviamos um e-mail com as informações do pedido e dados da entrega!");
+	}
+
+//	@RequestMapping(value = "/emailsend", method = RequestMethod.POST)
+
 
 }

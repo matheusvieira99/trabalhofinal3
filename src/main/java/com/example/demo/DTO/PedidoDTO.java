@@ -4,29 +4,25 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.OneToMany;
-
 import com.example.demo.entities.ClientEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class PedidoDTO {
-	
-	
+
 	private Long id;
-	
+
 	private Long numeroDoPedido;
-	
+
 	private Double valorTotalDoPedido;
-	
+
 	private LocalDate dataDoPedido;
-	
+
 	private LocalDate dataDaEntrega;
-	
+
 	private String status;
-	
-	
+
 	private Set<ProdutosPedidosDTO> listaProdutos = new HashSet<>();
-	
+
 	@JsonIgnore
 	private ClientEntity cliente;
 
@@ -96,11 +92,11 @@ public class PedidoDTO {
 
 	@Override
 	public String toString() {
-		return "\nPedidoDTO \nId=" + id + "\n\nNumero Do Pedido=" + numeroDoPedido + "\n\nValorTotalDoPedido="
-				+ valorTotalDoPedido + "\n\nData Do Pedido=" + dataDoPedido + "\n\nDataDaEntrega=" + dataDaEntrega
-				+ "\n\nStatus=" + status + "\n\nListaProdutos=" + listaProdutos + "\n\nCliente=" + cliente;
+		
+		return "\nPedido nº " + numeroDoPedido + "\n\nValor Total do Pedido  R$" + valorTotalDoPedido
+				+ "\n\nData do Pedido: " + dataDoPedido+ "\n\nData da Entrega: " + dataDaEntrega
+				+ "(Seu pedido chegará em 10 dias úteis)" + "\n\nStatus: " + status + "\n\nLista de Produtos: "
+				+ listaProdutos;
 	}
-	
-	
 
 }

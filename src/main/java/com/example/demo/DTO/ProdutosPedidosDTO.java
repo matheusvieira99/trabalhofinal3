@@ -1,5 +1,9 @@
 package com.example.demo.DTO;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.example.demo.repositories.ProdutoRepository;
+
 public class ProdutosPedidosDTO {
 
 	private Integer id;
@@ -53,5 +57,13 @@ public class ProdutosPedidosDTO {
 	public void setPreco(Double preco) {
 		this.preco = preco;
 	}
+	
+	@Autowired ProdutoRepository prodRepo;
+	
+	@Override
+	public String toString() {
+		return "\n----------  \nId: " + id + "\nQuantidade: " + quantidade + "\nPreço: " + preco;
+	}
 
+	
 }

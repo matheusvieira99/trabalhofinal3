@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -37,6 +38,8 @@ public class ClientService {
 	@Autowired
 	EnderecoService enderecoService;
 	
+
+	
 	public List<ClientDTO> findAll(){
 		List<ClientEntity> list = new ArrayList<>();
 		list.addAll(repo.findAll());
@@ -52,7 +55,12 @@ public class ClientService {
 	public ClientDTO create(ClientDTO cliObj) {
 	
 		ClientEntity cliEnt = new ClientEntity();
+		
+		
+	
+		
 		cliEnt = mapper.toEntity(cliObj);
+		
 		
 		
 		

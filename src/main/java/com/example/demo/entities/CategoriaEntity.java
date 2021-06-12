@@ -61,6 +61,12 @@ public class CategoriaEntity {
 		this.produtos = produtos;
 	}
 
+	@Override
+	public String toString() {
+		return "CategoriaEntity [id=" + id + ", nome=" + nome + ", descricao=" + descricao + ", produtos=" + produtos
+				+ "]";
+	}
+
 
 
 	

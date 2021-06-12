@@ -9,17 +9,21 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.example.demo.entities.EnderecoEntity;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 public class ClientDTO {
 
-
+	
 	
 	private String email;
 	
 	private String username;
 	
-	private Integer senha;
+	@JsonBackReference
+	private String senha;
 	
 	private String nome;
 	
@@ -27,6 +31,7 @@ public class ClientDTO {
 	
 	private Integer telefone;
 	
+	@DateTimeFormat
 	private LocalDate dataNascimento;
 	
 	
@@ -58,12 +63,12 @@ public class ClientDTO {
 	}
 
 
-	public Integer getSenha() {
+	public String getSenha() {
 		return senha;
 	}
 
 
-	public void setSenha(Integer senha) {
+	public void setSenha(String senha) {
 		this.senha = senha;
 	}
 

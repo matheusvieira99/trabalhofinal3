@@ -3,18 +3,21 @@ package com.example.demo.entities;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
+
+import org.hibernate.validator.constraints.br.CPF;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table
@@ -24,23 +27,27 @@ public class ClientEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
+	@Email
 	private String email;
 	
 	private String username;
 	
-	private Integer senha;
+	private String senha;
 	
 	private String nome;
 	
+	@CPF
 	private String cpf;
 	
 	private Integer telefone;
-	
+	@DateTimeFormat
 	private LocalDate dataNascimento;
 	
-	@OneToMany(mappedBy = "client")
+	
+	@OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
 	private List<EnderecoEntity> enderecoId = new ArrayList<>();
 	
+
 	@JsonBackReference
 	@OneToMany(mappedBy = "cliente")
 	private List<PedidoEntity> pedidos = new ArrayList<>();
@@ -71,11 +78,11 @@ public class ClientEntity {
 		this.username = username;
 	}
 
-	public Integer getSenha() {
+	public String getSenha() {
 		return senha;
 	}
 
-	public void setSenha(Integer senha) {
+	public void setSenha(String senha) {
 		this.senha = senha;
 	}
 
@@ -117,6 +124,21 @@ public class ClientEntity {
 
 	public void setEnderecoId(List<EnderecoEntity> enderecoId) {
 		this.enderecoId = enderecoId;
+	}
+
+	@Override
+	public String toString() {
+		return "ClientEntity [id=" + id + ", email=" + email + ", username=" + username + ", senha=" + senha + ", nome="
+				+ nome + ", cpf=" + cpf + ", telefone=" + telefone + ", dataNascimento=" + dataNascimento
+				+ ", enderecoId=" + ", pedidos=" + "]";
+	}
+
+	public List<PedidoEntity> getPedidos() {
+		return pedidos;
+	}
+
+	public void setPedidos(List<PedidoEntity> pedidos) {
+		this.pedidos = pedidos;
 	}
 
 

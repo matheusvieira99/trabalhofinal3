@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.example.demo.DTO.ClientDTO;
@@ -17,6 +18,9 @@ import com.example.demo.entities.EnderecoEntity;
 public class ClientMapper {
 	
 	@Autowired EnderecoMapper mapper;
+	
+	@Autowired
+	BCryptPasswordEncoder bCrypt;
 	
 	public ClientDTO toDTO (ClientEntity entity) {
 		ClientDTO dto = new ClientDTO();
@@ -34,7 +38,7 @@ public class ClientMapper {
 		
 		dto.setDataNascimento(entity.getDataNascimento());
 		dto.setCpf(entity.getCpf());
-		
+		dto.setEmail(entity.getEmail());
 		return dto;
 		
 	}
@@ -44,8 +48,10 @@ public class ClientMapper {
 		
 		entity.setNome(dto.getNome());
 		entity.setUsername(dto.getUsername());
-		entity.setSenha(dto.getSenha());
+		entity.setSenha(bCrypt.encode(dto.getSenha()));
 		entity.setTelefone(dto.getTelefone());
+		
+		
 //		entity.setEnderecoId(dto.getEnderecoId());
 		/*
 		 * List<EnderecoDTO> listDTO = ;
@@ -58,6 +64,7 @@ public class ClientMapper {
 		
 		entity.setDataNascimento(dto.getDataNascimento());
 		entity.setCpf(dto.getCpf());
+		entity.setEmail(dto.getEmail());
 		
 		return entity;
 	}

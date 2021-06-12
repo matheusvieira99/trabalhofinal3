@@ -123,6 +123,11 @@ public ProdutoDTO() {
 		this.id = id;
 	}
 
+	@Override
+	public String toString() {
+		return "\nProduto  Nome: " + nome + "\nPreco: " + preco + "\n\n";
+	}
+
 
 
 	
